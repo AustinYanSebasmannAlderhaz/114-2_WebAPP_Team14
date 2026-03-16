@@ -115,6 +115,7 @@ footer{
     margin-top:50px;
 }
 
+/*MODIFY FROM HERE*/
 /* ==========================
    Character card backgrounds
    ========================== */
@@ -122,8 +123,8 @@ footer{
 /* 卡片外框設定 */
 .character-card {
     height: 350px; 
-    padding: 0;         /* 移除原本的 padding，改由內部元素控制 */
-    position: relative; /* 讓內部的圖片和文字框可以絕對定位 */
+    padding: 0;         /* 移除原始 padding，改由內部元素控制 */
+    position: relative; /* 圖片和文字框絕對定位 */
     overflow: hidden;   /* 把超出圓角的圖片切掉 */
 }
 
@@ -142,7 +143,7 @@ footer{
     object-position: center 5%; 
 }
 
-/* 將實體 <img> 標籤變成背景的魔法 */
+/* <img> 標籤變bg */
 .card-bg-img {
     width: 100%;
     height: 100%;
@@ -150,7 +151,7 @@ footer{
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 0;         /* Img: Buttom */
+    z-index: 0;         /* Img: Bottom */
 }
 
 /* 角色半透明文字框 */
