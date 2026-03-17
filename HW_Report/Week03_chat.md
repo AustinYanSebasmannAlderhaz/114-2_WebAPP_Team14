@@ -27,7 +27,6 @@ style.css:51
 新增 .hero::after 深色遮罩，確保標題文字可讀
 新增 @keyframes hero-pan，背景由 0 移到 -3007px，45 秒線性無限循環
 補充：
-
 我沒有改 index.html 結構，直接用 CSS 套用到現有 .hero。
 你這張檔案內容實際是 WebP（但副檔名是 .jpg）；若有瀏覽器或伺服器顯示問題，建議改成 .webp 並同步更新路徑。
 ```
