@@ -70,7 +70,7 @@ body{
     background-repeat:repeat-x;
     background-size:auto 100%;
     background-position:0 center;
-    animation:hero-pan 100s linear infinite;
+    animation:hero-pan 80s linear infinite;     /* extended loop time */
     will-change:background-position;
     z-index:0;
 }
@@ -181,6 +181,18 @@ footer{
 
 .zane-img {
     object-position: center 5%; 
+}
+
+.cole-img {
+    object-position: center 17; 
+}
+
+.naya-img {
+    object-position: center 20%; 
+}
+
+.lloyd-img {
+    object-position: center; 
 }
 
 /* <img> 標籤變bg */
