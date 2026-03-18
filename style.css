@@ -66,11 +66,11 @@ body{
     content:"";
     position:absolute;
     inset:0;
-    background-image:url("img/all_NINJAGO_posters.png");  /* New bg */
+    background-image:url("img/Ninjago-banner.png");  /* New bg */
     background-repeat:repeat-x;
     background-size:auto 100%;
     background-position:0 center;
-    animation:hero-pan 80s linear infinite;     /* extended loop time */
+    animation:hero-pan 60s linear infinite;     /* extended loop time */
     will-change:background-position;
     z-index:0;
 }
