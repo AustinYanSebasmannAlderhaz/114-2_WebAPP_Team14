@@ -1,20 +1,21 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>時間線 | Ninjago Archive</title>
+<title>Ninjago 歷史時間線</title>
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <header>
     <nav class="navbar">
-        <div class="logo"><img src="img/lego-ninjago-logo.png" height="80"></div>
+        <div class="logo"><img src="img/lego-ninjago-logo.png" alt="Ninjago Archive Logo" height="80px"></div>
         <ul class="nav-links">
             <li><a href="index.html">首頁</a></li>
-            <li><a href="timeline.html">時間線</a></li>
+            <li><a class="active" href="timeline.html">時間線</a></li>
             <li><a href="world.html">世界觀</a></li>
             <li><a href="characters.html">角色</a></li>
             <li><a href="elements.html">元素力量</a></li>
@@ -22,47 +23,90 @@
     </nav>
 </header>
 
-<section class="timeline">
 
-    <h1 class="page-title">歷史時間線</h1>
+<section class="section dark">
+    <h2>Before the Ninja Era</h2>
+    <div class="immersive-stage">
+        <div class="axis"></div>
+        <article class="tl-entry">
+            <h3>創世與來源龍誕生</h3>
+            <p>以太分界先於萬物，來源龍孕育元素之力，各領域開始形成。</p>
+        </article>
 
-    <div class="timeline-line"></div>
+        <article class="tl-entry">
+            <h3>鬼族與龍族戰爭與第一旋風忍術大師</h3>
+            <p>第一旋風忍術大師誕生，創造國度水晶，並開啟跨領域秩序。</p>
+        </article>
 
-    <!-- Event -->
-    <div class="timeline-event">
-        <h3>Long Before Time Had a Name</h3>
-        <p>來源龍誕生，元素之力被創造，世界尚未分裂。</p>
+        <article class="tl-entry">
+            <h3>Wojira沉眠與Pre-Ninjago</h3>
+            <p>Nyad犧牲、雙護身符分離，Wojira沉睡；忍者國島嶼文明基礎建立。</p>
+        </article>
+
+        <article class="tl-entry">
+            <h3>蛇族戰爭、時之戰與前導前夕</h3>
+            <p>元素聯盟對抗蛇族，時光雙子引發時之戰，最終銜接忍者誕生年代。</p>
+        </article>
     </div>
-
-    <div class="timeline-event">
-        <h3>鬼族與龍族戰爭</h3>
-        <p>兩大種族的戰爭撕裂世界，第一旋風忍術大師誕生。</p>
-    </div>
-
-    <div class="timeline-event">
-        <h3>忍者時代開始</h3>
-        <p>吳大師訓練忍者，對抗黑暗與命運。</p>
-    </div>
-
-    <div class="timeline-event">
-        <h3>The Merge</h3>
-        <p>所有領域融合，世界秩序崩壞。</p>
-    </div>
-
 </section>
 
-<script>
-const events = document.querySelectorAll('.timeline-event');
+<section class="section dark">
+    <h2>NINJAGO：Masters of Spinjitzu</h2>
+    <div class="immersive-stage">
+        <div class="axis"></div>
+        <article class="tl-entry">
+            <h3>試播集：忍者團隊成立</h3>
+            <p>吳大師集結初代忍者，黃金武器旅程展開，正式進入NINJAGO時代。</p>
+        </article>
 
-window.addEventListener('scroll', () => {
-    events.forEach(e => {
-        const rect = e.getBoundingClientRect();
-        if(rect.top < window.innerHeight - 100){
-            e.classList.add('show');
-        }
-    });
-});
-</script>
+        <article class="tl-entry">
+            <h3>S1-S2：蛇族崛起與綠忍者傳說</h3>
+            <p>綠忍者身分確立，黑暗衝突全面升級，忍者國歷史進入關鍵轉折。</p>
+        </article>
+
+        <article class="tl-entry">
+            <h3>S3-S7：科技、幽靈、海盜與時間戰線</h3>
+            <p>新忍者城危機、幽靈入侵、Skybound事件與時光雙子，重寫世界規則。</p>
+        </article>
+
+        <article class="tl-entry">
+            <h3>S8-S15：伽瑪當之子到Crystalized</h3>
+            <p>反抗軍、鬼族入侵、虛無之境、Seabound與水晶王國終局，舊時代落幕。</p>
+        </article>
+    </div>
+</section>
+
+<section class="section dark">
+    <h2>NINJAGO：Dragons Rising</h2>
+    <div class="immersive-stage">
+        <div class="axis"></div>
+        <article class="tl-entry">
+            <h3>融合前與來源龍異變</h3>
+            <p>拉斯囚禁能量來源龍，吳與勞埃德追查「聚結」，世界失衡加劇。</p>
+        </article>
+
+        <article class="tl-entry">
+            <h3>The Merge：多領域重組</h3>
+            <p>融合事件爆發，各界地貌與秩序重寫，新世代角色正式登場。</p>
+        </article>
+
+        <article class="tl-entry">
+            <h3>DR S1：新團隊成形</h3>
+            <p>亞林、索拉、野火與舊世代忍者並行作戰，帝權王國與雲朵王國事件升溫。</p>
+        </article>
+
+        <article class="tl-entry">
+            <h3>DR S2：血月陰謀與來源大賽</h3>
+            <p>狼族與寺廟城計畫同步推進，來源龍發出警告，戰線匯聚至來源大賽。</p>
+        </article>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Ninjago Archive Project</p>
+</footer>
+
 
 </body>
+<script src="script.js"></script>
 </html>
