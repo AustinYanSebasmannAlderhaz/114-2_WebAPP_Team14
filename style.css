@@ -238,6 +238,29 @@ footer{
     overflow: hidden;   /* 把超出圓角的圖片切掉 */
 }
 
+/* Hover effect */
+.character-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+}
+
+.character-card:hover::before {
+    left: 100%;
+}
+
+/* Img animation */
+.character-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 圖片覆蓋整個卡片區域 */
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.character-card:hover img {
+    transform: scale(1.08);
+    filter: brightness(1.15);
+}
+
 /* Img positions fine-tune */
 
 .kai-img {
@@ -262,7 +285,7 @@ footer{
 }
 
 .lloyd-img {
-    object-position: center; 
+    object-position: center 40%; 
 }
 
 /* <img> 標籤變bg */
@@ -290,6 +313,16 @@ footer{
     padding: 10px 16px;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px); 
+}
+
+/* 文字框微動畫 */
+.character-card .card-content {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.character-card:hover .card-content {
+    font-weight: bolder, lighter;
+    color: #ff4d4d;
 }
 
 /* 文字框內的標題與段落微調 */
