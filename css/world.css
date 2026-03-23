@@ -1,0 +1,19 @@
+/*
+ * world.css
+ * Styles specific to the World page (src/world.html).
+ * Extracted from the original style.css during project restructuring.
+ */
+
+/* ===== World Grid Layout ===== */
+
+.world-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.world-card {
+    background: #222;
+    padding: 20px;
+    border-radius: 10px;
+}

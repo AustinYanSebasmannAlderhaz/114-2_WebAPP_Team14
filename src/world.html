@@ -4,18 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>世界觀 | Ninjago Archive</title>
-<link rel="stylesheet" href="style.css">
+<!-- Paths use ../ because this file is in src/ (one level below root) -->
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/world.css">
 </head>
 
 <body>
 
 <header>
     <nav class="navbar">
-        <div class="logo"><img src="img/lego-ninjago-logo.png" alt="Ninjago Archive Logo" height="80px"></div>
+        <!-- Logo path: go up one level to reach img/ -->
+        <div class="logo"><img src="../img/lego-ninjago-logo.png" alt="Ninjago Archive Logo" height="80px"></div>
         <ul class="nav-links">
-            <li><a href="index.html">首頁</a></li>
+            <!-- index.html is at root, so use ../ ; other pages are in same src/ folder -->
+            <li><a href="../index.html">首頁</a></li>
             <li><a href="timeline.html">時間線</a></li>
-            <li><a href="world.html">世界觀</a></li>
+            <li><a class="active" href="world.html">世界觀</a></li>
             <li><a href="characters.html">角色</a></li>
             <li><a href="elements.html">元素力量</a></li>
         </ul>
@@ -53,5 +57,8 @@
 <footer>
     <p>© 2026 Ninjago Archive Project</p>
 </footer>
+
+<!-- Page-specific JavaScript -->
+<script src="../action/world.js"></script>
 </body>
 </html>

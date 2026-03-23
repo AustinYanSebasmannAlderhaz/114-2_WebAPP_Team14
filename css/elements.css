@@ -1,0 +1,103 @@
+/*
+ * elements.css
+ * Styles specific to the Elements page (src/elements.html).
+ *
+ * RESTRUCTURED: Removed duplicated common styles (reset, navbar, section, footer)
+ * that are now in common.css. Only element-page-specific styles remain.
+ */
+
+/* ===== Elements Source Container ===== */
+
+.source-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.source-block {
+    background: #1b1b1b;
+    padding: 25px;
+    border-radius: 15px;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.source-block:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+.source-block h2 {
+    margin-bottom: 15px;
+}
+
+/* ===== Element Tags Layout ===== */
+
+.element-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.element {
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    transition: 0.3s;
+}
+
+.element:hover {
+    transform: scale(1.1);
+}
+
+/* ===== Element Color System ===== */
+
+.fire {
+    background: #ff4d4d;
+}
+
+.heat {
+    background: #ff944d;
+}
+
+.energy {
+    background: #00e6e6;
+}
+
+.lightning {
+    background: #4da6ff;
+}
+
+.ice {
+    background: #99e6ff;
+}
+
+.earth {
+    background: #b38600;
+}
+
+.quake {
+    background: #806000;
+}
+
+.water {
+    background: #3399ff;
+}
+
+.wind {
+    background: #66ffcc;
+}
+
+.creation {
+    background: #cc66ff;
+}
+
+.fusion {
+    background: #ff66cc;
+}
+
+.tech {
+    background: #6666ff;
+}
