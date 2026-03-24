@@ -23,6 +23,7 @@
 - 2026/03/24: 所有檔案均已註解。
 
 **老哥記得要先 ```git pull``` 再開始動工喔!!! (不然會出大事😱😱😱)**  
+
 > - 要編輯 **HTML** 的話，進[src資料夾](https://github.com/AustinYanSebasmannAlderhaz/114-2_WebAPP_Team14/tree/main/src)修改 ```{各自的}.html```，不要修改[index.html](https://github.com/AustinYanSebasmannAlderhaz/114-2_WebAPP_Team14/blob/main/index.html)。  
 > - 要改 **CSS** 的話，進[css資料夾](https://github.com/AustinYanSebasmannAlderhaz/114-2_WebAPP_Team14/tree/main/css)修改 ```{各自的}.css```，不要修改[style.css](https://github.com/AustinYanSebasmannAlderhaz/114-2_WebAPP_Team14/blob/main/style.css)。  
 > - **JS** 也一樣，進[action資料夾](https://github.com/AustinYanSebasmannAlderhaz/114-2_WebAPP_Team14/tree/main/action)修改 ```{各自的}.js```，不要修改[script.js](https://github.com/AustinYanSebasmannAlderhaz/114-2_WebAPP_Team14/blob/main/script.js)。
