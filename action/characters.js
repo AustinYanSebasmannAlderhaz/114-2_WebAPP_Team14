@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const render = () => {
             slider.style.transform = `translateX(-${index * 100}%)`;
+            visibleSlides.forEach((slide, slideIndex) => {
+                slide.classList.toggle('is-active', slideIndex === index);
+            });
 
             if (dotsWrap) {
                 dotsWrap.querySelectorAll('.carousel-dot').forEach((dot, dotIndex) => {
