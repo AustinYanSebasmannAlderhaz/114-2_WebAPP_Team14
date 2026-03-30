@@ -30,7 +30,21 @@
     <div class="character-grid">
         {% for character in characters %}
         <article class="character-profile">
-            <div class="card character-card" data-carousel>
+            <div
+                class="card character-card"
+                data-carousel
+                data-name="{{ character.name }}"
+                data-gender="{{ character.get_gender_display }}"
+                data-affiliation="{{ character.affiliation }}"
+                data-homeland="{{ character.homeland }}"
+                data-occupation="{{ character.occupation }}"
+                data-element="{% if character.element %}{{ character.element }}{% else %}-{% endif %}"
+                data-first-appearance="{{ character.first_appearance }}"
+                data-description="{{ character.description }}"
+                role="button"
+                tabindex="0"
+                aria-label="查看 {{ character.name }} 詳細資訊"
+            >
                 <button class="carousel-btn prev" type="button" aria-label="上一張">‹</button>
                 <div class="character-slider" data-slider>
                     {% for photo in character.images.all %}
@@ -45,28 +59,33 @@
                     <h3>{{ character.name }}</h3>
                 </div>
             </div>
-
-            <div class="profile-body">
-                <ul class="profile-meta">
-                    <li><strong>性別：</strong>{{ character.get_gender_display }}</li>
-                    <li><strong>所屬陣營：</strong>{{ character.affiliation }}</li>
-                    <li><strong>出身地：</strong>{{ character.homeland }}</li>
-                    <li><strong>職業：</strong>{{ character.occupation }}</li>
-                    <li><strong>元素屬性：</strong>{% if character.element %}{{ character.element }}{% else %}-{% endif %}</li>
-                    <li><strong>初次登場：</strong>{{ character.first_appearance }}</li>
-                </ul>
-                <p class="profile-desc">{{ character.description }}</p>
-            </div>
         </article>
         {% empty %}
         <article class="character-profile">
-            <div class="profile-body">
-                <p class="profile-desc">目前資料庫尚未建立角色資料，請先到 Django Admin 新增 Character 與 CharacterImage。</p>
-            </div>
+            <div class="empty-note">目前資料庫尚未建立角色資料，請先到 Django Admin 新增 Character 與 CharacterImage。</div>
         </article>
         {% endfor %}
     </div>
 </section>
+
+<div class="character-modal" id="character-modal" aria-hidden="true">
+    <div class="character-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+        <button class="character-modal-close" id="character-modal-close" type="button" aria-label="關閉">×</button>
+        <h2 id="modal-name"></h2>
+        <div class="modal-image-wrap">
+            <img id="modal-image" src="" alt="" class="modal-image">
+        </div>
+        <ul class="modal-meta">
+            <li><strong>性別：</strong><span id="modal-gender"></span></li>
+            <li><strong>所屬陣營：</strong><span id="modal-affiliation"></span></li>
+            <li><strong>出身地：</strong><span id="modal-homeland"></span></li>
+            <li><strong>職業：</strong><span id="modal-occupation"></span></li>
+            <li><strong>元素屬性：</strong><span id="modal-element"></span></li>
+            <li><strong>初次登場：</strong><span id="modal-first-appearance"></span></li>
+        </ul>
+        <p class="modal-description" id="modal-description"></p>
+    </div>
+</div>
 
 <footer>
     <p>© 2026 Ninjago Archive Project</p>
