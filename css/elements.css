@@ -6,30 +6,137 @@
  * that are now in common.css. Only element-page-specific styles remain.
  */
 
-/* ===== Elements Source Container ===== */
+/* ===== Elements Stage ===== */
 
-.source-container {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-}
-
-.source-block {
-    background: #1b1b1b;
-    padding: 25px;
-    border-radius: 15px;
-    transition: 0.3s;
+.elements-section {
     position: relative;
     overflow: hidden;
 }
 
-.source-block:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+.elements-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 50% 28%, rgba(38, 160, 255, 0.16), transparent 35%),
+        radial-gradient(circle at 20% 80%, rgba(230, 36, 41, 0.09), transparent 38%);
 }
 
-.source-block h2 {
-    margin-bottom: 15px;
+.elements-intro {
+    position: relative;
+    z-index: 2;
+    margin: -8px auto 20px;
+    text-align: center;
+    color: #c6d5e4;
+}
+
+.source-orbit-stage {
+    --badge-gap: clamp(18px, 2.6vw, 28px);
+    position: relative;
+    z-index: 2;
+    height: clamp(290px, 36vw, 410px);
+    border-radius: 0;
+    overflow: hidden;
+    margin: 0 auto 30px;
+    border: 0;
+    background: transparent;
+}
+
+.source-orbit-stage::before {
+    content: none;
+}
+
+.source-orbit-track {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: flex-end;
+    width: max-content;
+    animation: source-drift 22s linear infinite;
+    z-index: 2;
+}
+
+.source-orbit-track.is-paused {
+    animation-play-state: paused;
+}
+
+.source-lane {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--badge-gap);
+    padding: 0;
+}
+
+.source-lane::after {
+    content: "";
+    flex: 0 0 var(--badge-gap);
+}
+
+.source-badge {
+    min-width: clamp(142px, 15vw, 176px);
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transform: scale(1);
+    opacity: 1;
+    transition: transform 0.24s ease, filter 0.24s ease;
+}
+
+.source-badge img {
+    width: clamp(126px, 13vw, 154px);
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.5));
+}
+
+.source-badge span {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+}
+
+.source-badge:hover,
+.source-badge:focus-visible,
+.source-badge.is-active {
+    transform: scale(1.07);
+    filter: brightness(1.12);
+}
+
+.source-badge:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+.source-detail-panel {
+    position: relative;
+    z-index: 2;
+    background: rgba(10, 16, 24, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.source-panel {
+    display: none;
+    animation: panel-fade 0.25s ease;
+}
+
+.source-panel.is-active {
+    display: block;
+}
+
+.source-panel h2 {
+    margin: 0 0 15px;
+    font-size: 28px;
 }
 
 /* ===== Element Tags Layout ===== */
@@ -37,14 +144,18 @@
 .element-list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     gap: 15px;
 }
 
 .element {
+    min-width: 92px;
     padding: 15px 25px;
     border-radius: 10px;
     font-weight: bold;
     color: white;
+    text-align: center;
     transition: 0.3s;
 }
 
@@ -52,52 +163,97 @@
     transform: scale(1.1);
 }
 
+@keyframes source-drift {
+    from {
+        transform: translate(0, -50%);
+    }
+    to {
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes panel-fade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 760px) {
+    .source-orbit-stage {
+        --badge-gap: 14px;
+        height: clamp(245px, 58vw, 320px);
+    }
+
+    .source-badge {
+        min-width: clamp(124px, 24vw, 150px);
+    }
+
+    .source-badge img {
+        width: clamp(106px, 21vw, 132px);
+    }
+
+    .source-badge span {
+        font-size: 12px;
+    }
+
+    .source-panel h2 {
+        font-size: 23px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .source-orbit-track {
+        animation: none;
+    }
+}
+
 /* ===== Element Color System ===== */
+/* Color logic:
+ * Thermal / impact -> warm reds/oranges
+ * Electric / light / time -> cool cyan-blue-violet
+ * Nature / poison / plants -> green spectrum
+ * Mental / illusion / shadow -> indigo-purple-dark
+ */
 
-.fire {
-    background: #ff4d4d;
-}
+.element-fire { background: #ff5a3c; }
+.element-speed { background: #ff8d33; }
+.element-sound { background: #f2b63f; color: #202020; }
+.element-vibration { background: #bb66ff; }
+.element-shockwave { background: #ff4fa2; }
 
-.heat {
-    background: #ff944d;
-}
+.element-lightning { background: #49b8ff; }
+.element-thermal { background: #ff7043; }
+.element-light { background: #ffe177; color: #232323; }
 
-.energy {
-    background: #00e6e6;
-}
+.element-earth { background: #8d6c45; }
+.element-metal { background: #9eadbf; color: #202830; }
+.element-gravity { background: #4f5fa8; }
+.element-tension { background: #2d8481; }
+.element-cohesion { background: #7e9e4f; }
 
-.lightning {
-    background: #4da6ff;
-}
+.element-vitality { background: #39d67f; }
+.element-nature { background: #4caf50; }
+.element-poison { background: #8bc34a; color: #1c2a16; }
+.element-plants { background: #2f9b52; }
+.element-size { background: #d7834d; }
 
-.ice {
-    background: #99e6ff;
-}
+.element-water { background: #3399ff; }
+.element-time { background: #6f78ff; }
+.element-wind { background: #5cd8d0; color: #143035; }
+.element-smoke { background: #7e8699; }
+.element-shapeshift { background: #b57bff; }
 
-.earth {
-    background: #b38600;
-}
+.element-ice { background: #8ce5ff; color: #16323f; }
+.element-mind { background: #8d78ff; }
+.element-reflection { background: #b6f1ff; color: #173742; }
+.element-illusion { background: #cb8bff; }
+.element-tech { background: #4d83ff; }
 
-.quake {
-    background: #806000;
-}
-
-.water {
-    background: #3399ff;
-}
-
-.wind {
-    background: #66ffcc;
-}
-
-.creation {
-    background: #cc66ff;
-}
-
-.fusion {
-    background: #ff66cc;
-}
-
-.tech {
-    background: #6666ff;
-}
+.element-balance { background: #ffd166; color: #2c2310; }
+.element-shadow { background: #5c5878; }
+.element-amber { background: #d99a2b; color: #2b1d06; }

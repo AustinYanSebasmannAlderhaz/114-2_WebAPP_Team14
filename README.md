@@ -54,6 +54,7 @@ Project Progress Update：
 
 ⚠️⚠️ 注意 **看這裡** ⚠️⚠️
 
+- 2026/03/31: Elements 頁面設計與資料庫連現。
 - 2026/03/31: Database 建立與前端連接設定。
 - 2026/03/30: 建立 Django 專案，並完成基本設定。 ```Admin的帳號密碼我放Line。```
 
