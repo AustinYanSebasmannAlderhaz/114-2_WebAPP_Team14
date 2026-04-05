@@ -8,6 +8,71 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Reformat dense timeline paragraphs into readable blocks
+    const formatTimelineContent = () => {
+        const entryParagraphs = document.querySelectorAll('.tl-entry > p');
+
+        entryParagraphs.forEach((paragraph) => {
+            const rawText = (paragraph.innerText || '').replace(/\r/g, '').trim();
+            if (!rawText) {
+                return;
+            }
+
+            const lines = rawText
+                .split('\n')
+                .map((line) => line.trim())
+                .filter(Boolean);
+
+            const content = document.createElement('div');
+            content.className = 'tl-content';
+
+            let listEl = null;
+            const flushList = () => {
+                listEl = null;
+            };
+
+            lines.forEach((line) => {
+                if (line.startsWith('### ')) {
+                    flushList();
+                    const subTitle = document.createElement('h4');
+                    subTitle.textContent = line.replace(/^###\s+/, '').trim();
+                    content.appendChild(subTitle);
+                    return;
+                }
+
+                if (line.startsWith('#### ')) {
+                    flushList();
+                    const subSection = document.createElement('h5');
+                    subSection.textContent = line.replace(/^####\s+/, '').trim();
+                    content.appendChild(subSection);
+                    return;
+                }
+
+                if (/^[-•]\s+/.test(line)) {
+                    if (!listEl) {
+                        listEl = document.createElement('ul');
+                        listEl.className = 'tl-list';
+                        content.appendChild(listEl);
+                    }
+                    const item = document.createElement('li');
+                    item.textContent = line.replace(/^[-•]\s+/, '').trim();
+                    listEl.appendChild(item);
+                    return;
+                }
+
+                flushList();
+                const text = document.createElement('p');
+                text.className = 'tl-text';
+                text.textContent = line;
+                content.appendChild(text);
+            });
+
+            paragraph.replaceWith(content);
+        });
+    };
+
+    formatTimelineContent();
+
     // Timeline entry scroll-reveal animation
     const entries = document.querySelectorAll('.tl-entry');
     const io = new IntersectionObserver((items) => {
