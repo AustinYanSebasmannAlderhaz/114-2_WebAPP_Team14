@@ -54,6 +54,26 @@ Project Progress Update：
 
 ⚠️⚠️ 注意 **看這裡** ⚠️⚠️
 
+- 2026/04/14: Elements 頁面正式接上元素資料庫與歷任持有者資料。
+
+> 新增 `ElementSource`、`ElementPower`、`ElementHolderHistory` 三張資料表，Elements 頁面的 popup 內容已改為由 Django / SQLite 動態讀取，會顯示元素描述、現任持有者與歷任持有者，查不到資料時會顯示「無資料」。
+
+- 2026/04/14: Elements popup 可直接查看角色詳細資訊。
+
+> 在元素 popup 的「歷年持有者」清單中，若該筆資料有對應的角色資料庫紀錄，點擊名字即可開啟角色詳細 modal；若只有文字資料、沒有角色主檔，則維持不可點擊狀態。
+
+- 2026/04/14: Backend / Django 相容性修正完成。
+
+> 修正 Elements 相關 API 與模型載入問題，並處理 Django 6 的 `CheckConstraint` 寫法相容性，避免 `runserver` 因 model constraint 參數錯誤而直接噴掉。
+
+- 2026/04/13: Feedback 頁面、Feedback DB 與頁尾聯絡區完成。
+
+> 新增聯絡 / 回饋頁面、`Feedback` 模型與對應資料表，前端表單資料可送進 Django 後端並寫入 SQLite，管理者也能從 Django Admin 查看收到的回饋內容。
+
+- 2026/04/13: 首頁底部導覽與 Elements 頁面互動重新設計。
+
+> 重新設計 bottom navigation / contact 區塊，並在 Elements 頁面加入來源龍徽章輪播、Source 詳細描述面板、點擊放大旋轉與點擊外部自動收合的互動流程。
+
 - 2026/04/08: 角色人氣投票系統上線。
 
 > 新增 `POST /characters/<id>/vote/` API，後端加入 `CharacterVote` 模型（同一 session 同一角色限投一次），前端按鈕投票後鎖定顯示「已投票」。
@@ -86,7 +106,7 @@ Project Progress Update：
 
 ---
 
-- 2026/03/31: Elements 頁面設計與資料庫連現。
+- 2026/03/31: Elements 頁面設計與資料庫連線。
 - 2026/03/31: Database 建立與前端連接設定。
 - 2026/03/30: 建立 Django 專案，並完成基本設定。 ```Admin的帳號密碼我放Line。```
 
