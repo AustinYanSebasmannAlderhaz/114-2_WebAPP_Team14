@@ -54,6 +54,8 @@ Project Progress Update：
 
 ⚠️⚠️ 注意 **看這裡** ⚠️⚠️
 
+- 2026/04/27: 在所有頁面加入BackTop（一鍵返回頂部）。
+
 - 2026/04/14: Elements 頁面正式接上元素資料庫與歷任持有者資料。
 
 > 新增 `ElementSource`、`ElementPower`、`ElementHolderHistory` 三張資料表，Elements 頁面的 popup 內容已改為由 Django / SQLite 動態讀取，會顯示元素描述、現任持有者與歷任持有者，查不到資料時會顯示「無資料」。
