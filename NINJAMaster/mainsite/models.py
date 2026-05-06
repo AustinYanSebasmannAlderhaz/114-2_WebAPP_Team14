@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -87,6 +88,33 @@ class CharacterVote(models.Model):
 
     def __str__(self) -> str:
         return f"{self.character.name} vote by {self.session_key}"
+
+
+class CharacterFavorite(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="character_favorites",
+    )
+    character = models.ForeignKey(
+        Character,
+        on_delete=models.CASCADE,
+        related_name="favorites",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "character_favorite"
+        ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "character"],
+                name="uniq_character_favorite_per_user",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.user} favorite {self.character.name}"
 
 
 # Feedback model — stores visitor feedback submitted from the Contact page

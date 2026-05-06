@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 
 from .models import (
     Character,
+    CharacterFavorite,
     CharacterImage,
     CharacterVote,
     ElementHolderHistory,
@@ -108,7 +109,24 @@ def auth_status_api(request):
 
 @login_required
 def profile_page(request):
-    return render(request, "profile.html")
+    favorite_characters = (
+        Character.objects.filter(favorites__user=request.user)
+        .prefetch_related(
+            Prefetch(
+                "images",
+                queryset=CharacterImage.objects.order_by("sort_order", "id"),
+            )
+        )
+        .order_by("name")
+    )
+
+    return render(
+        request,
+        "profile.html",
+        {
+            "favorite_characters": favorite_characters,
+        },
+    )
 
 
 @ensure_csrf_cookie
@@ -130,12 +148,19 @@ def characters_page(request):
     voted_character_ids = set(
         CharacterVote.objects.filter(session_key=session_key).values_list("character_id", flat=True)
     )
+    favorite_character_ids = set()
+    if request.user.is_authenticated:
+        favorite_character_ids = set(
+            CharacterFavorite.objects.filter(user=request.user).values_list("character_id", flat=True)
+        )
+
     return render(
         request,
         "characters.html",
         {
             "characters": characters,
             "voted_character_ids": voted_character_ids,
+            "favorite_character_ids": favorite_character_ids,
         },
     )
 
@@ -165,6 +190,38 @@ def character_vote(request, character_id):
             "already_voted": not created,
             "character_id": character.id,
             "vote_count": character.vote_count,
+        }
+    )
+
+
+@require_POST
+def character_favorite_toggle(request, character_id):
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {
+                "ok": False,
+                "login_required": True,
+            },
+            status=401,
+        )
+
+    character = get_object_or_404(Character, pk=character_id)
+    favorite, created = CharacterFavorite.objects.get_or_create(
+        user=request.user,
+        character=character,
+    )
+
+    if created:
+        is_favorited = True
+    else:
+        favorite.delete()
+        is_favorited = False
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "character_id": character.id,
+            "favorited": is_favorited,
         }
     )
 

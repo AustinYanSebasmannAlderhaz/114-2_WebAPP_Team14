@@ -82,6 +82,47 @@
     background: rgba(230, 36, 41, 0.85);
 }
 
+.favorite-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 6;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.68);
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 8px 10px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.favorite-btn:hover,
+.favorite-btn:focus-visible {
+    background: rgba(230, 36, 41, 0.92);
+    border-color: rgba(255, 255, 255, 0.4);
+    outline: 0;
+    transform: translateY(-1px);
+}
+
+.favorite-btn.is-favorited {
+    background: rgba(255, 213, 0, 0.92);
+    border-color: rgba(255, 255, 255, 0.55);
+    color: #191919;
+}
+
+.favorite-btn:disabled {
+    cursor: wait;
+    opacity: 0.72;
+}
+
 .carousel-dots {
     position: absolute;
     left: 50%;

@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import (
     Character,
+    CharacterFavorite,
     CharacterImage,
     CharacterVote,
     ElementHolderHistory,
@@ -38,6 +39,15 @@ class CharacterVoteAdmin(admin.ModelAdmin):
     list_display = ("character", "session_key", "created_at")
     list_filter = ("character", "created_at")
     search_fields = ("character__name", "session_key")
+
+
+@admin.register(CharacterFavorite)
+class CharacterFavoriteAdmin(admin.ModelAdmin):
+    list_display = ("user", "character", "created_at")
+    list_filter = ("created_at", "character")
+    search_fields = ("user__username", "character__name")
+    readonly_fields = ("created_at",)
+    autocomplete_fields = ("user", "character")
 
 
 # Feedback admin — allows reviewing visitor feedback in the Django admin panel

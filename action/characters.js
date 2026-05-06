@@ -55,6 +55,24 @@ document.addEventListener('DOMContentLoaded', () => {
         modalVoteBtn.textContent = hasVoted ? '已投票' : '投一票';
     };
 
+    const setFavoriteButtonState = (button, isFavorited, isLoading = false) => {
+        if (!button) return;
+
+        button.disabled = isLoading;
+        button.classList.toggle('is-favorited', Boolean(isFavorited));
+        button.setAttribute('aria-pressed', isFavorited ? 'true' : 'false');
+
+        const textNode = button.querySelector('.favorite-text');
+        if (textNode) {
+            textNode.textContent = isLoading ? '處理中...' : (isFavorited ? '已收藏' : '收藏');
+        }
+    };
+
+    const redirectToLogin = () => {
+        const next = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+        window.location.href = `/login/?next=${encodeURIComponent(next)}`;
+    };
+
     const setModalImage = (card) => {
         if (!modalImage || !card) return;
 
@@ -125,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevBtn = carousel.querySelector('.carousel-btn.prev');
         const nextBtn = carousel.querySelector('.carousel-btn.next');
         const dotsWrap = carousel.querySelector('[data-dots]');
+        const favoriteBtn = carousel.querySelector('[data-favorite-btn]');
 
         if (!slider || slides.length === 0) return;
 
@@ -217,8 +236,52 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dotsWrap) dotsWrap.style.display = 'none';
         }
 
+        if (favoriteBtn) {
+            setFavoriteButtonState(favoriteBtn, carousel.dataset.isFavorited === 'true');
+            favoriteBtn.addEventListener('click', async (event) => {
+                event.stopPropagation();
+
+                const characterId = carousel.dataset.characterId || '';
+                if (!characterId) return;
+
+                const previousState = carousel.dataset.isFavorited === 'true';
+                setFavoriteButtonState(favoriteBtn, previousState, true);
+
+                try {
+                    const response = await fetch(`/characters/${characterId}/favorite/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCsrfToken(),
+                            Accept: 'application/json',
+                        },
+                        credentials: 'same-origin',
+                    });
+
+                    if (response.status === 401) {
+                        redirectToLogin();
+                        return;
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const isFavorited = Boolean(data?.favorited);
+                    carousel.dataset.isFavorited = isFavorited ? 'true' : 'false';
+                    setFavoriteButtonState(favoriteBtn, isFavorited);
+                } catch (error) {
+                    setFavoriteButtonState(favoriteBtn, previousState);
+                }
+            });
+        }
+
         carousel.addEventListener('click', (event) => {
-            if (event.target.closest('.carousel-btn') || event.target.closest('.carousel-dot')) return;
+            if (
+                event.target.closest('.carousel-btn') ||
+                event.target.closest('.carousel-dot') ||
+                event.target.closest('[data-favorite-btn]')
+            ) return;
             openModal(carousel);
         });
 

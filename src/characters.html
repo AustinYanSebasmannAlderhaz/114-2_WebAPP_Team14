@@ -7,7 +7,7 @@
     {% load static %}
     <title>角色 | Ninjago Archive</title>
     <link rel="stylesheet" href="{% static 'css/common.css' %}?v=auth-menu-20260506">
-    <link rel="stylesheet" href="{% static 'css/characters.css' %}">
+    <link rel="stylesheet" href="{% static 'css/characters.css' %}?v=favorites-20260506">
     <link rel="stylesheet" href="{% static 'css/search.css' %}?v=auth-menu-20260506">
 </head>
 
@@ -64,6 +64,7 @@
                 <div class="card character-card" data-carousel data-clickable data-character-id="{{ character.id }}"
                     data-vote-count="{{ character.vote_count }}"
                     data-has-voted="{% if character.id in voted_character_ids %}true{% else %}false{% endif %}"
+                    data-is-favorited="{% if character.id in favorite_character_ids %}true{% else %}false{% endif %}"
                     data-name="{{ character.name }}" data-gender="{{ character.get_gender_display }}"
                     data-affiliation="{{ character.affiliation }}" data-homeland="{{ character.homeland }}"
                     data-occupation="{{ character.occupation }}"
@@ -82,6 +83,13 @@
                         {% endfor %}
                     </div>
                     <button class="carousel-btn next" type="button" aria-label="下一張">›</button>
+                    <button class="favorite-btn{% if character.id in favorite_character_ids %} is-favorited{% endif %}"
+                        type="button"
+                        data-favorite-btn
+                        aria-pressed="{% if character.id in favorite_character_ids %}true{% else %}false{% endif %}">
+                        <span class="favorite-icon" aria-hidden="true">⭐</span>
+                        <span class="favorite-text">{% if character.id in favorite_character_ids %}已收藏{% else %}收藏{% endif %}</span>
+                    </button>
                     <div class="carousel-dots" data-dots></div>
                     <div class="card-content">
                         <h3>{{ character.name }}</h3>
@@ -157,7 +165,7 @@
         <p>&copy; 2026 Ninjago Archive Project</p>
     </footer>
 
-    <script src="{% static 'action/characters.js' %}"></script>
+    <script src="{% static 'action/characters.js' %}?v=favorites-20260506"></script>
     <script src="{% static 'action/search.js' %}"></script>
     <script src="{% static 'action/back-to-top.js' %}"></script>
 </body>
