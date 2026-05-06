@@ -7,6 +7,124 @@
  *       so use "../img/…" to reach the img/ folder at root.
  */
 
+/* ===== Left Bookmark Rail ===== */
+
+.timeline-bookmark {
+    position: fixed;
+    left: 0;
+    top: 112px;
+    z-index: 1120;
+    display: flex;
+    align-items: stretch;
+    transform: translateX(calc(-100% + 14px));
+    transition: transform 0.24s ease;
+}
+
+.timeline-bookmark:hover,
+.timeline-bookmark:focus-within {
+    transform: translateX(0);
+}
+
+.timeline-bookmark-handle {
+    width: 14px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background: rgba(230, 36, 41, 0.45);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    box-shadow: 3px 0 12px rgba(0, 0, 0, 0.35);
+    user-select: none;
+    transition: background 0.2s ease, color 0.2s ease, width 0.2s ease;
+}
+
+.timeline-bookmark:hover .timeline-bookmark-handle,
+.timeline-bookmark:focus-within .timeline-bookmark-handle {
+    width: 20px;
+    background: rgba(230, 36, 41, 0.86);
+    color: #fff;
+}
+
+.timeline-bookmark-panel {
+    width: min(330px, 56vw);
+    max-height: calc(100vh - 140px);
+    overflow: auto;
+    padding: 14px 12px 16px;
+    background: rgba(11, 11, 14, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-left: 0;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    backdrop-filter: blur(8px);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.timeline-bookmark-panel::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.timeline-bookmark-panel h4 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    color: #fff;
+}
+
+#timeline-bookmark-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+}
+
+#timeline-bookmark-list li {
+    margin: 0;
+}
+
+.timeline-bookmark-link {
+    display: block;
+    padding: 5px 7px;
+    border-radius: 8px;
+    color: #d6d6d6;
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 1.35;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.timeline-bookmark-link:hover,
+.timeline-bookmark-link:focus-visible {
+    background: rgba(230, 36, 41, 0.2);
+    color: #fff;
+    outline: none;
+}
+
+.timeline-bookmark-link.h2-link {
+    font-weight: 700;
+    color: #f2f2f2;
+}
+
+.timeline-bookmark-link.h3-link {
+    padding-left: 16px;
+    color: #c9c9c9;
+}
+
+.timeline-bookmark-link.is-active {
+    background: rgba(230, 36, 41, 0.34);
+    color: #fff;
+}
+
 /* ===== Timeline Hero (extended hero variant) ===== */
 
 .timeline-hero {
@@ -138,6 +256,11 @@
     font-size: 21px;
 }
 
+.section.dark h2,
+.tl-entry h3 {
+    scroll-margin-top: 120px;
+}
+
 .tl-entry p {
     color: #d2d2d2;
     line-height: 1.7;
@@ -196,6 +319,20 @@
 /* ===== Responsive: collapse to single-column timeline ===== */
 
 @media (max-width: 900px) {
+    .timeline-bookmark {
+        top: 98px;
+        transform: translateX(calc(-100% + 12px));
+    }
+
+    .timeline-bookmark-handle {
+        width: 12px;
+        font-size: 7px;
+    }
+
+    .timeline-bookmark-panel {
+        width: min(280px, 74vw);
+    }
+
     .axis {
         left: 16px;
         transform: none;
