@@ -27,6 +27,11 @@ from pathlib import Path
 SITE_ROOT = Path(__file__).resolve().parents[2]
 
 urlpatterns = [
+    path("login/", views.login_page, name="login"),
+    path("register/", views.register_page, name="register"),
+    path("accounts/register/", views.register_page, name="accounts-register"),
+    path("accounts/login/", views.login_page, name="accounts-login"),
+    path("logout/", views.logout_page, name="logout"),
     path("", TemplateView.as_view(template_name="index.html"), name="home"),
     path("index.html", TemplateView.as_view(template_name="index.html"), name="index-file"),
     path("src/timeline.html", TemplateView.as_view(template_name="timeline.html"), name="timeline-file"),
