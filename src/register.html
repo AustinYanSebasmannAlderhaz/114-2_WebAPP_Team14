@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | Ninjago Archive</title>
     <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/search.css">
     <style>
         .auth-wrap {
             min-height: calc(100vh - 200px);
@@ -100,25 +101,33 @@
 <body>
     <header>
         <nav class="navbar">
-            <div class="logo"><img src="/img/lego-ninjago-logo.png" alt="Ninjago Archive Logo" height="80"></div>
+            <div class="logo"><img src="/img/lego-ninjago-logo.png" alt="Ninjago Archive Logo" height="80px"></div>
             <ul class="nav-links">
+                <li class="search-wrapper">
+                    <button class="search-toggle" type="button" aria-label="搜尋">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.65" y1="16.65" x2="21" y2="21"/></svg>
+                    </button>
+                    <div class="search-input-wrap">
+                        <input class="search-input" type="text" placeholder="搜尋角色、事件、集數…" aria-label="搜尋關鍵字">
+                    </div>
+                </li>
                 <li><a href="/index.html">首頁</a></li>
                 <li><a href="/src/timeline.html">時間線</a></li>
                 <li><a href="/src/world.html">世界觀</a></li>
                 <li><a href="/characters/">角色</a></li>
                 <li><a href="/src/elements.html">元素力量</a></li>
+                <li><a href="http://127.0.0.1:8000/login/">登入</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="auth-wrap">
         <section class="auth-card">
-            <h1>Member Register</h1>
+            <h1>會員註冊</h1>
 
             {% if form.errors %}
                 <div class="auth-errors">
-                    請檢查欄位內容是否符合規則。
-                    {{ form.errors }}
+                    註冊資料有誤，請檢查下列欄位：{{ form.errors }}
                 </div>
             {% endif %}
 
@@ -127,30 +136,32 @@
                 <input type="hidden" name="next" value="{{ next }}">
 
                 <div class="auth-field">
-                    <label for="id_username">Username</label>
+                    <label for="id_username">帳號</label>
                     {{ form.username }}
                     <p class="help-text">{{ form.username.help_text }}</p>
                 </div>
 
                 <div class="auth-field">
-                    <label for="id_password1">Password</label>
+                    <label for="id_password1">密碼</label>
                     {{ form.password1 }}
                     <p class="help-text">{{ form.password1.help_text }}</p>
                 </div>
 
                 <div class="auth-field">
-                    <label for="id_password2">Confirm Password</label>
+                    <label for="id_password2">確認密碼</label>
                     {{ form.password2 }}
                     <p class="help-text">{{ form.password2.help_text }}</p>
                 </div>
 
                 <div class="auth-actions">
                     <button class="auth-btn" type="submit">註冊</button>
-                    <a class="auth-btn secondary" href="/login/">前往登入</a>
-                    <a class="auth-btn secondary" href="/index.html">回首頁</a>
+                    <a class="auth-btn secondary" href="/login/">已有帳號？登入</a>
+                    <a class="auth-btn secondary" href="/index.html">返回首頁</a>
                 </div>
             </form>
         </section>
     </main>
+    <script src="/action/search.js"></script>
 </body>
 </html>
+

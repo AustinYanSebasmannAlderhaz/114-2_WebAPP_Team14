@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Ninjago Archive</title>
     <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/search.css">
     <style>
         .auth-wrap {
             min-height: calc(100vh - 200px);
@@ -91,33 +92,42 @@
 <body>
     <header>
         <nav class="navbar">
-            <div class="logo"><img src="/img/lego-ninjago-logo.png" alt="Ninjago Archive Logo" height="80"></div>
+            <div class="logo"><img src="/img/lego-ninjago-logo.png" alt="Ninjago Archive Logo" height="80px"></div>
             <ul class="nav-links">
+                <li class="search-wrapper">
+                    <button class="search-toggle" type="button" aria-label="搜尋">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.65" y1="16.65" x2="21" y2="21"/></svg>
+                    </button>
+                    <div class="search-input-wrap">
+                        <input class="search-input" type="text" placeholder="搜尋角色、事件、集數…" aria-label="搜尋關鍵字">
+                    </div>
+                </li>
                 <li><a href="/index.html">首頁</a></li>
                 <li><a href="/src/timeline.html">時間線</a></li>
                 <li><a href="/src/world.html">世界觀</a></li>
                 <li><a href="/characters/">角色</a></li>
                 <li><a href="/src/elements.html">元素力量</a></li>
+                <li><a class="active" href="http://127.0.0.1:8000/login/">登入</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="auth-wrap">
         <section class="auth-card">
-            <h1>Member Login</h1>
+            <h1>會員登入</h1>
 
             {% if request.user.is_authenticated %}
-                <p class="auth-note">你目前已登入：{{ request.user.username }}</p>
+                <p class="auth-note">你已經登入：{{ request.user.username }}</p>
                 <form method="post" action="/logout/">
                     {% csrf_token %}
                     <button class="auth-btn secondary" type="submit">登出</button>
                 </form>
             {% else %}
-                <p class="auth-note">請先登入</p>
+                <p class="auth-note">請先登入你的帳號。</p>
 
                 {% if form.errors %}
                     <div class="auth-errors">
-                        帳號或密碼錯誤，請再試一次。
+                        帳號或密碼錯誤，請重新輸入。
                     </div>
                 {% endif %}
 
@@ -126,23 +136,25 @@
                     <input type="hidden" name="next" value="{{ next }}">
 
                     <div class="auth-field">
-                        <label for="id_username">Username</label>
+                        <label for="id_username">帳號</label>
                         {{ form.username }}
                     </div>
 
                     <div class="auth-field">
-                        <label for="id_password">Password</label>
+                        <label for="id_password">密碼</label>
                         {{ form.password }}
                     </div>
 
                     <div class="auth-actions">
                         <button class="auth-btn" type="submit">登入</button>
                         <a class="auth-btn secondary" href="/register/" style="text-decoration:none;">前往註冊</a>
-                        <a class="auth-btn secondary" href="/index.html" style="text-decoration:none;">回首頁</a>
+                        <a class="auth-btn secondary" href="/index.html" style="text-decoration:none;">返回首頁</a>
                     </div>
                 </form>
             {% endif %}
         </section>
     </main>
+    <script src="/action/search.js"></script>
 </body>
 </html>
+
