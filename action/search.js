@@ -32,6 +32,8 @@ const ALL_PAGES = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
+    initializeAuthNav();
+
     /* ------------------------------------------------------------------ */
     /*  1. Search toggle UI — open/close the search input                 */
     /* ------------------------------------------------------------------ */
@@ -736,4 +738,130 @@ function setLiveCountText(node, text) {
     if (!node) return;
     node.textContent = text || '';
     node.classList.toggle('is-visible', Boolean(text));
+}
+
+async function initializeAuthNav() {
+    const loginLink = findLoginNavLink();
+    if (!loginLink) return;
+
+    const loginItem = loginLink.closest('li');
+    if (!loginItem) return;
+
+    try {
+        const response = await fetch('/api/auth/status/', {
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            setLoggedOutNav(loginLink);
+            return;
+        }
+
+        const data = await response.json();
+        if (data.authenticated) {
+            renderLoggedInNav(loginItem, data.display_name || data.username || '會員');
+        } else {
+            setLoggedOutNav(loginLink);
+        }
+    } catch (err) {
+        setLoggedOutNav(loginLink);
+    }
+}
+
+function findLoginNavLink() {
+    return Array.from(document.querySelectorAll('.nav-links a')).find((link) => {
+        try {
+            const url = new URL(link.getAttribute('href') || '', window.location.origin);
+            return url.pathname === '/login/' || url.pathname === '/accounts/login/';
+        } catch (err) {
+            return false;
+        }
+    });
+}
+
+function setLoggedOutNav(loginLink) {
+    loginLink.textContent = '未登入';
+    loginLink.href = buildLoginUrl();
+    loginLink.classList.add('auth-login-link');
+}
+
+function renderLoggedInNav(loginItem, displayName) {
+    loginItem.className = `${loginItem.className} auth-menu`.trim();
+    loginItem.innerHTML = '';
+
+    const button = document.createElement('button');
+    button.className = 'auth-menu-trigger';
+    button.type = 'button';
+    button.setAttribute('aria-haspopup', 'true');
+    button.setAttribute('aria-expanded', 'false');
+    button.textContent = displayName;
+
+    const menu = document.createElement('div');
+    menu.className = 'auth-dropdown';
+    menu.setAttribute('role', 'menu');
+
+    const profileLink = document.createElement('a');
+    profileLink.href = '/profile/';
+    profileLink.setAttribute('role', 'menuitem');
+    profileLink.textContent = '個人檔案';
+
+    const logoutButton = document.createElement('button');
+    logoutButton.type = 'button';
+    logoutButton.setAttribute('role', 'menuitem');
+    logoutButton.textContent = '登出';
+    logoutButton.addEventListener('click', handleLogoutClick);
+
+    menu.append(profileLink, logoutButton);
+    loginItem.append(button, menu);
+
+    loginItem.addEventListener('mouseenter', () => button.setAttribute('aria-expanded', 'true'));
+    loginItem.addEventListener('mouseleave', () => button.setAttribute('aria-expanded', 'false'));
+    loginItem.addEventListener('focusin', () => button.setAttribute('aria-expanded', 'true'));
+    loginItem.addEventListener('focusout', (event) => {
+        if (!loginItem.contains(event.relatedTarget)) {
+            button.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
+function buildLoginUrl() {
+    if (window.location.pathname === '/login/' || window.location.pathname === '/accounts/login/') {
+        return '/login/';
+    }
+
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    return `/login/?next=${encodeURIComponent(current)}`;
+}
+
+async function handleLogoutClick() {
+    try {
+        const response = await fetch('/logout/', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': getCookieValue('csrftoken'),
+            },
+        });
+
+        if (response.redirected) {
+            window.location.href = response.url;
+            return;
+        }
+
+        window.location.href = '/login/';
+    } catch (err) {
+        window.location.href = '/login/';
+    }
+}
+
+function getCookieValue(name) {
+    const cookie = document.cookie
+        .split(';')
+        .map((item) => item.trim())
+        .find((item) => item.startsWith(`${name}=`));
+
+    return cookie ? decodeURIComponent(cookie.slice(name.length + 1)) : '';
 }

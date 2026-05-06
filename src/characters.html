@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <title>角色 | Ninjago Archive</title>
-    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}?v=auth-menu-20260506">
     <link rel="stylesheet" href="{% static 'css/characters.css' %}">
-    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}?v=auth-menu-20260506">
 </head>
 
 <body>
@@ -35,7 +35,20 @@
                 <li><a href="/src/world.html">世界觀</a></li>
                 <li><a class="active" href="/characters/">角色</a></li>
                 <li><a href="/src/elements.html">元素力量</a></li>
-                <li><a href="http://127.0.0.1:8000/login/">登入</a></li>
+                {% if request.user.is_authenticated %}
+                <li class="auth-menu">
+                    <button class="auth-menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">{% firstof request.user.get_full_name request.user.username %}</button>
+                    <div class="auth-dropdown" role="menu">
+                        <a href="/profile/" role="menuitem">個人檔案</a>
+                        <form method="post" action="/logout/">
+                            {% csrf_token %}
+                            <button type="submit" role="menuitem">登出</button>
+                        </form>
+                    </div>
+                </li>
+                {% else %}
+                <li><a class="auth-login-link" href="/login/?next={{ request.get_full_path|urlencode }}">未登入</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

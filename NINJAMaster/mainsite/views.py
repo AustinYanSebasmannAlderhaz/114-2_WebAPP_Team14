@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import F, Prefetch
 from django.http import JsonResponse
@@ -86,6 +87,28 @@ def logout_page(request):
     if request.method == "POST" and request.user.is_authenticated:
         logout(request)
     return redirect("login")
+
+
+@ensure_csrf_cookie
+def auth_status_api(request):
+    user = request.user
+    display_name = ""
+    if user.is_authenticated:
+        display_name = user.get_full_name() or user.get_username()
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "authenticated": user.is_authenticated,
+            "username": user.get_username() if user.is_authenticated else "",
+            "display_name": display_name,
+        }
+    )
+
+
+@login_required
+def profile_page(request):
+    return render(request, "profile.html")
 
 
 @ensure_csrf_cookie
