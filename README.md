@@ -54,6 +54,18 @@ Project Progress Update：
 
 ⚠️⚠️ 注意 **看這裡** ⚠️⚠️
 
+- 2026/05/07: 個人化時間線書籤系統上線。
+
+> 新增 `TimelineProgress` 資料表與 `/api/timeline/progress/` API，登入使用者可以在 `timeline.html` 的每個時間線事件上按「加入書籤」記錄目前看到的位置；每位使用者只會保留一個時間線書籤，新的書籤會取代舊書籤，也可以按「清除」移除。左側 `timeline-bookmark` 側邊欄會用 `★` 與黃色樣式標出目前書籤，`profile.html` 也會顯示「我的時間線書籤」。
+
+- 2026/05/07: 忍者角色收藏系統完成。
+
+> 新增 `CharacterFavorite` 資料表與 `POST /characters/<id>/favorite/` API，登入使用者可以在 `characters.html` 的角色卡片按「⭐ 收藏 / 已收藏」切換收藏狀態；未登入時會導向登入頁。`profile.html` 新增「我的收藏角色」區塊，會顯示目前帳號收藏的角色。
+
+- 2026/05/06: 使用者登入、註冊、登出與個人檔案系統完成。
+
+> 接上 Django auth，新增 `/login/`、`/register/`、`/logout/`、`/profile/` 與 `/api/auth/status/`。Navbar 的登入按鈕會依 session 狀態顯示「未登入」或目前使用者名稱，登入後 hover/focus 可展開「個人檔案」與「登出」。`profile.html` 作為使用者個人 dashboard，後續收藏角色與時間線書籤也會集中顯示在這裡。
+
 - 2026/04/27: 在所有頁面加入BackTop（一鍵返回頂部）。
 
 - 2026/04/14: Elements 頁面正式接上元素資料庫與歷任持有者資料。
