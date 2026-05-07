@@ -143,6 +143,56 @@
             color: #cfcfcf;
             line-height: 1.6;
         }
+
+        .progress-section {
+            width: min(920px, 100%);
+            margin-top: 24px;
+        }
+
+        .progress-section h2 {
+            margin: 0 0 14px;
+            font-size: 24px;
+        }
+
+        .progress-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .progress-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+            border: 1px solid #303030;
+            border-radius: 8px;
+            background: #1b1b1b;
+            padding: 12px;
+        }
+
+        .progress-item h3 {
+            margin: 0 0 4px;
+            font-size: 16px;
+        }
+
+        .progress-item p {
+            margin: 0;
+            color: #bfbfbf;
+            font-size: 13px;
+        }
+
+        .progress-status {
+            border-radius: 999px;
+            padding: 6px 9px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .progress-status.bookmarked {
+            background: rgba(255, 213, 0, 0.18);
+            color: #ffd95e;
+        }
     </style>
 </head>
 <body>
@@ -216,6 +266,24 @@
             </div>
             {% else %}
             <p class="favorite-empty">你還沒有收藏角色。到角色頁按下「⭐ 收藏」後，收藏會出現在這裡。</p>
+            {% endif %}
+        </section>
+        <section class="progress-section">
+            <h2>我的時間線書籤</h2>
+            {% if timeline_progress_items %}
+            <div class="progress-list">
+                {% for item in timeline_progress_items %}
+                <article class="progress-item">
+                    <div>
+                        <h3>{{ item.title }}</h3>
+                        <p>{{ item.section_title|default:"時間線" }}</p>
+                    </div>
+                    <span class="progress-status {{ item.status }}">目前進度</span>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="favorite-empty">你還沒有加入時間線書籤。到時間線頁按下「加入書籤」後會出現在這裡。</p>
             {% endif %}
         </section>
     </main>

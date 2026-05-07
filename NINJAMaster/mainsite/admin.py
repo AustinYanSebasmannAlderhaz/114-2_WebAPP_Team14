@@ -9,6 +9,7 @@ from .models import (
     ElementPower,
     ElementSource,
     Feedback,
+    TimelineProgress,
 )
 
 
@@ -48,6 +49,15 @@ class CharacterFavoriteAdmin(admin.ModelAdmin):
     search_fields = ("user__username", "character__name")
     readonly_fields = ("created_at",)
     autocomplete_fields = ("user", "character")
+
+
+@admin.register(TimelineProgress)
+class TimelineProgressAdmin(admin.ModelAdmin):
+    list_display = ("user", "title", "section_title", "status", "updated_at")
+    list_filter = ("status", "section_title", "updated_at")
+    search_fields = ("user__username", "title", "section_title", "timeline_key")
+    readonly_fields = ("created_at", "updated_at")
+    autocomplete_fields = ("user",)
 
 
 # Feedback admin — allows reviewing visitor feedback in the Django admin panel

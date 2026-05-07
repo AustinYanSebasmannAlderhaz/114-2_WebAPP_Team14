@@ -117,6 +117,36 @@ class CharacterFavorite(models.Model):
         return f"{self.user} favorite {self.character.name}"
 
 
+class TimelineProgress(models.Model):
+    class Status(models.TextChoices):
+        BOOKMARKED = "bookmarked", "Bookmarked"
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="timeline_progress",
+    )
+    timeline_key = models.CharField(max_length=160)
+    title = models.CharField(max_length=220)
+    section_title = models.CharField(max_length=160, blank=True, default="")
+    status = models.CharField(max_length=20, choices=Status.choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "timeline_progress"
+        ordering = ["section_title", "title"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user"],
+                name="uniq_timeline_bookmark_per_user",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.user} {self.timeline_key} {self.status}"
+
+
 # Feedback model — stores visitor feedback submitted from the Contact page
 class Feedback(models.Model):
     # Dropdown choices matching the site's main content sections

@@ -2,21 +2,17 @@
  * timeline.js
  * JavaScript for the Timeline page (src/timeline.html).
  *
- * Contains the IntersectionObserver logic that was previously in the
- * root-level script.js. This reveals timeline entries with a fade-in
- * animation as they scroll into view.
+ * Reveals timeline entries, builds the bookmark rail, and lets signed-in users
+ * save one personal "current progress" bookmark.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Reformat dense timeline paragraphs into readable blocks
     const formatTimelineContent = () => {
         const entryParagraphs = document.querySelectorAll('.tl-entry > p');
 
         entryParagraphs.forEach((paragraph) => {
             const rawText = (paragraph.innerText || '').replace(/\r/g, '').trim();
-            if (!rawText) {
-                return;
-            }
+            if (!rawText) return;
 
             const lines = rawText
                 .split('\n')
@@ -48,14 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                if (/^[-•]\s+/.test(line)) {
+                if (/^[-*•]\s+/.test(line)) {
                     if (!listEl) {
                         listEl = document.createElement('ul');
                         listEl.className = 'tl-list';
                         content.appendChild(listEl);
                     }
                     const item = document.createElement('li');
-                    item.textContent = line.replace(/^[-•]\s+/, '').trim();
+                    item.textContent = line.replace(/^[-*•]\s+/, '').trim();
                     listEl.appendChild(item);
                     return;
                 }
@@ -159,7 +155,150 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupTimelineBookmarks();
 
-    // Timeline entry scroll-reveal animation
+    const setupPersonalTimelineBookmark = async () => {
+        const entries = Array.from(document.querySelectorAll('.tl-entry'));
+        if (entries.length === 0) return;
+
+        const getCsrfToken = () => {
+            const cookieValue = document.cookie
+                .split(';')
+                .map((cookie) => cookie.trim())
+                .find((cookie) => cookie.startsWith('csrftoken='));
+            return cookieValue ? decodeURIComponent(cookieValue.split('=').slice(1).join('=')) : '';
+        };
+
+        const getEntryMeta = (entry, index) => {
+            const titleNode = entry.querySelector('h3');
+            const sectionTitle = entry.closest('section')?.querySelector('h2')?.textContent?.trim() || '';
+            const title = titleNode?.textContent?.trim() || `Timeline ${index + 1}`;
+            const key = titleNode?.id || `timeline-entry-${index + 1}`;
+
+            return { key, title, sectionTitle };
+        };
+
+        const setBookmarkLink = (bookmarkKey) => {
+            document.querySelectorAll('.timeline-bookmark-link').forEach((link) => {
+                link.classList.toggle('is-user-bookmark', link.getAttribute('href') === `#${bookmarkKey}`);
+            });
+        };
+
+        const setBookmarkedEntry = (bookmarkKey) => {
+            entries.forEach((entry) => {
+                const isBookmarked = Boolean(bookmarkKey) && entry.dataset.timelineKey === bookmarkKey;
+                entry.classList.toggle('is-bookmarked', isBookmarked);
+                entry.dataset.isBookmarked = isBookmarked ? 'true' : 'false';
+
+                const label = entry.querySelector('[data-bookmark-current]');
+                if (label) {
+                    label.textContent = isBookmarked ? '目前書籤：這裡' : '尚未加入書籤';
+                }
+
+                const addButton = entry.querySelector('[data-bookmark-add]');
+                if (addButton) {
+                    addButton.classList.toggle('is-active', isBookmarked);
+                    addButton.setAttribute('aria-pressed', isBookmarked ? 'true' : 'false');
+                    addButton.textContent = isBookmarked ? '已加入書籤' : '加入書籤';
+                }
+            });
+
+            setBookmarkLink(bookmarkKey);
+        };
+
+        const redirectToLogin = () => {
+            const next = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+            window.location.href = `/login/?next=${encodeURIComponent(next)}`;
+        };
+
+        let isAuthenticated = false;
+        let bookmarkKey = '';
+
+        try {
+            const response = await fetch('/api/timeline/progress/', {
+                credentials: 'same-origin',
+                headers: {
+                    Accept: 'application/json',
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                isAuthenticated = Boolean(data.authenticated);
+                bookmarkKey = data.bookmark?.timeline_key || '';
+            }
+        } catch (error) {
+            bookmarkKey = '';
+        }
+
+        entries.forEach((entry, index) => {
+            const meta = getEntryMeta(entry, index);
+            entry.dataset.timelineKey = meta.key;
+
+            const controls = document.createElement('div');
+            controls.className = 'timeline-progress';
+            controls.innerHTML = `
+                <div class="timeline-progress-head">
+                    <span data-bookmark-current>尚未加入書籤</span>
+                </div>
+                <div class="timeline-progress-actions" aria-label="個人時間線書籤">
+                    <button type="button" data-bookmark-add aria-pressed="false">加入書籤</button>
+                    <button type="button" data-bookmark-clear>清除</button>
+                </div>
+            `;
+
+            entry.appendChild(controls);
+
+            controls.addEventListener('click', async (event) => {
+                const button = event.target.closest('button');
+                if (!button) return;
+
+                if (!isAuthenticated) {
+                    redirectToLogin();
+                    return;
+                }
+
+                const nextStatus = button.hasAttribute('data-bookmark-clear') ? '' : 'bookmarked';
+                controls.querySelectorAll('button').forEach((action) => {
+                    action.disabled = true;
+                });
+
+                try {
+                    const response = await fetch('/api/timeline/progress/', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCsrfToken(),
+                            Accept: 'application/json',
+                        },
+                        body: JSON.stringify({
+                            timeline_key: meta.key,
+                            title: meta.title,
+                            section_title: meta.sectionTitle,
+                            status: nextStatus,
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    bookmarkKey = data.bookmark?.timeline_key || '';
+                    setBookmarkedEntry(bookmarkKey);
+                } catch (error) {
+                    setBookmarkedEntry(bookmarkKey);
+                } finally {
+                    controls.querySelectorAll('button').forEach((action) => {
+                        action.disabled = false;
+                    });
+                }
+            });
+        });
+
+        setBookmarkedEntry(bookmarkKey);
+    };
+
+    setupPersonalTimelineBookmark();
+
     const entries = document.querySelectorAll('.tl-entry');
     const io = new IntersectionObserver((items) => {
         items.forEach((item) => {
@@ -170,6 +309,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.15 });
 
     entries.forEach((entry) => io.observe(entry));
-
-    console.log('[Timeline] Page loaded, observing', entries.length, 'entries.');
 });

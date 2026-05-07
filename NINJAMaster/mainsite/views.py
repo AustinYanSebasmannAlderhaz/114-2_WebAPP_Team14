@@ -19,6 +19,7 @@ from .models import (
     ElementHolderHistory,
     ElementPower,
     Feedback,
+    TimelineProgress,
 )
 
 
@@ -107,6 +108,110 @@ def auth_status_api(request):
     )
 
 
+@ensure_csrf_cookie
+def timeline_progress_api(request):
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            return JsonResponse(
+                {
+                    "ok": False,
+                    "login_required": True,
+                },
+                status=401,
+            )
+
+        return JsonResponse(
+            {
+                "ok": True,
+                "authenticated": False,
+                "items": {},
+            }
+        )
+
+    if request.method == "GET":
+        bookmark = TimelineProgress.objects.filter(user=request.user).order_by("-updated_at").first()
+        bookmark_payload = None
+        if bookmark:
+            bookmark_payload = {
+                "timeline_key": bookmark.timeline_key,
+                "status": bookmark.status,
+                "title": bookmark.title,
+                "section_title": bookmark.section_title,
+            }
+
+        return JsonResponse(
+            {
+                "ok": True,
+                "authenticated": True,
+                "bookmark": bookmark_payload,
+                "items": {bookmark.timeline_key: bookmark_payload} if bookmark else {},
+            }
+        )
+
+    if request.method != "POST":
+        return JsonResponse({"ok": False, "error": "Method not allowed."}, status=405)
+
+    try:
+        data = json.loads(request.body or "{}")
+    except json.JSONDecodeError:
+        return JsonResponse({"ok": False, "error": "Invalid JSON payload."}, status=400)
+
+    timeline_key = (data.get("timeline_key") or "").strip()
+    status = (data.get("status") or "").strip()
+    title = (data.get("title") or "").strip()
+    section_title = (data.get("section_title") or "").strip()
+
+    if not timeline_key:
+        return JsonResponse({"ok": False, "error": "timeline_key is required."}, status=400)
+
+    if status == "":
+        TimelineProgress.objects.filter(user=request.user).delete()
+        return JsonResponse(
+            {
+                "ok": True,
+                "authenticated": True,
+                "timeline_key": timeline_key,
+                "status": "",
+                "bookmark": None,
+            }
+        )
+
+    if status not in TimelineProgress.Status.values:
+        return JsonResponse({"ok": False, "error": "Invalid progress status."}, status=400)
+
+    if not title:
+        title = timeline_key
+
+    TimelineProgress.objects.filter(user=request.user).exclude(timeline_key=timeline_key).delete()
+
+    progress, _ = TimelineProgress.objects.update_or_create(
+        user=request.user,
+        timeline_key=timeline_key,
+        defaults={
+            "title": title[:220],
+            "section_title": section_title[:160],
+            "status": status,
+        },
+    )
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "authenticated": True,
+            "timeline_key": progress.timeline_key,
+            "status": progress.status,
+            "title": progress.title,
+            "section_title": progress.section_title,
+            "bookmark": {
+                "timeline_key": progress.timeline_key,
+                "status": progress.status,
+                "title": progress.title,
+                "section_title": progress.section_title,
+            },
+        }
+    )
+
+
 @login_required
 def profile_page(request):
     favorite_characters = (
@@ -119,12 +224,14 @@ def profile_page(request):
         )
         .order_by("name")
     )
+    timeline_progress_items = TimelineProgress.objects.filter(user=request.user).order_by("-updated_at")[:1]
 
     return render(
         request,
         "profile.html",
         {
             "favorite_characters": favorite_characters,
+            "timeline_progress_items": timeline_progress_items,
         },
     )
 

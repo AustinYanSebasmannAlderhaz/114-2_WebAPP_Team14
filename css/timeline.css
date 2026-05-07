@@ -125,6 +125,17 @@
     color: #fff;
 }
 
+.timeline-bookmark-link.is-user-bookmark {
+    background: rgba(255, 213, 0, 0.2);
+    color: #ffe57a;
+    font-weight: 700;
+}
+
+.timeline-bookmark-link.is-user-bookmark::before {
+    content: "★ ";
+    color: #ffd500;
+}
+
 /* ===== Timeline Hero (extended hero variant) ===== */
 
 .timeline-hero {
@@ -308,6 +319,66 @@
 .tl-list li {
     line-height: 1.8;
     color: #dbdbdb;
+}
+
+.timeline-progress {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.timeline-progress-head {
+    margin-bottom: 8px;
+    color: #bfbfbf;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.timeline-progress-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.timeline-progress-actions button {
+    border: 1px solid #3d3d3d;
+    border-radius: 999px;
+    background: #232323;
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 7px 10px;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.timeline-progress-actions button:hover,
+.timeline-progress-actions button:focus-visible {
+    border-color: #e62429;
+    color: #ffd7d8;
+    outline: 0;
+    transform: translateY(-1px);
+}
+
+.timeline-progress-actions button.is-active {
+    border-color: rgba(255, 255, 255, 0.55);
+    background: #ffd500;
+    color: #181818;
+}
+
+.timeline-progress-actions button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+.tl-entry.is-bookmarked {
+    border-left-color: #ffd500;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 213, 0, 0.16);
+}
+
+.tl-entry.is-bookmarked::before {
+    background: #ffd500;
+    box-shadow: 0 0 0 4px rgba(255, 213, 0, 0.24), 0 0 22px rgba(255, 213, 0, 0.48);
 }
 
 .tl-entry:hover {
