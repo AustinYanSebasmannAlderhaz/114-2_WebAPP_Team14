@@ -1,0 +1,85 @@
+/*
+ * login.css
+ * Page-specific styles for src/login.html.
+ */
+
+.auth-wrap {
+    min-height: calc(100vh - 200px);
+    display: grid;
+    place-items: center;
+    padding: 40px 16px;
+}
+
+.auth-card {
+    width: min(480px, 100%);
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-left: 4px solid #e62429;
+    border-radius: 12px;
+    padding: 24px 20px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+}
+
+.auth-card h1 {
+    margin: 0 0 16px;
+    font-size: 30px;
+}
+
+.auth-note {
+    margin: 0 0 16px;
+    color: #c7c7c7;
+    line-height: 1.6;
+}
+
+.auth-errors {
+    margin: 0 0 16px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 98, 98, 0.5);
+    background: rgba(130, 23, 23, 0.35);
+    color: #ffd7d7;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.auth-field {
+    margin-bottom: 14px;
+}
+
+.auth-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.auth-field input {
+    width: 100%;
+    border: 1px solid #3d3d3d;
+    border-radius: 8px;
+    background: #111;
+    color: #f2f2f2;
+    padding: 10px 12px;
+    font-size: 15px;
+}
+
+.auth-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.auth-btn {
+    border: 0;
+    border-radius: 8px;
+    background: #e62429;
+    color: #fff;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.auth-btn.secondary {
+    background: #2b2b2b;
+}
