@@ -89,14 +89,23 @@ CODEX 回應：
 
 我：
 
-``` text
-```
+> 這個專案新增了什麼功能？把找到的新內以及使用方式容寫進 README，接著依照既有的規則幫我補到 Week11 report 和 chat 裡面。
 
+CODEX 回應：
 >
-
-Claude 回應：  
-
->
-
 ``` text
+我先檢查目前 Django models、Admin、fixture 與 Week11 report/chat 格式，判斷後台維護最適合補在 Additional Content。
+
+這次完成的後台維護包含：
+- 新增 `mainsite/fixtures/initial_content.json`，保存角色、角色圖片、元素來源、元素能力與持有歷史。
+- 新增 `python manage.py seed_initial_content`，讓新資料庫可以一鍵載入預設內容。
+- 支援 `--reset-content`，可重建內容資料，但保留 Feedback，避免使用者回饋被刪除。
+- 強化 Django Admin，加入角色圖片預覽、圖片數顯示、Feedback 狀態與 `admin_note`。
+- 補上 README 使用說明與 Project Progress Update。
+- 補測試確認 seed 指令與 Feedback 預設狀態正常。
+
+驗證：
+python manage.py migrate
+python manage.py check
+python manage.py test
 ```

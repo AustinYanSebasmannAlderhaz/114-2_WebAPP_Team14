@@ -47,9 +47,23 @@
 >   - **Purpose**: Make the saved timeline position visible while browsing.
 >   - **Usage in this project**: The bookmarked timeline entry is highlighted, and the matching item in the left `timeline-bookmark` sidebar is marked with `★` and a yellow style.
 
+### Backend Content Maintenance Workflow
+
+> - **Initial content fixture**
+>   - **Purpose**: Make the default character and element data reusable when setting up a new database.
+>   - **Usage in this project**: We exported characters, character images, element sources, element powers, and holder-history records into `mainsite/fixtures/initial_content.json`.
+>
+> - **Seed management command**
+>   - **Purpose**: Let developers restore default content with one command instead of manually recreating records in Django Admin.
+>   - **Usage in this project**: We added `python manage.py seed_initial_content`; using `--reset-content` rebuilds content tables while keeping existing `Feedback` records.
+>
+> - **Admin maintenance improvements**
+>   - **Purpose**: Make backend content review and feedback handling easier.
+>   - **Usage in this project**: Django Admin now shows character image previews, character image counts, and Feedback status fields (`New`, `Reviewed`, `Archived`) with optional `admin_note`.
+
 ## Contribution
 
 | Member | Percentage | Contribution |
 | :--: | :--: | :-- |
 | 顏伯亨 | 50% | Development of login/logout/registration system, bookmark system, and character collection system., Bug Fix, and Report Writing |
-| 呂羿樺 | 50% | Create feedback system, Home page optimization, Bug Fix, and Report Writing |
+| 呂羿樺 | 50% | Create backend content maintenance Workflow and Report Writing |
