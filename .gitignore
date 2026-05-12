@@ -2,7 +2,7 @@ img/Element.zip
 implementation_plan.md
 walkthrough.md
 env
-__pycache__/
+*__pycache__/
 *.py[cod]
 *.sqlite3
 Feeback-section_implementation_plan.md
