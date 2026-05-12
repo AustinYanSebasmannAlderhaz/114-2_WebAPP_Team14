@@ -157,11 +157,19 @@ class Feedback(models.Model):
         WORLD = "world", "World"
         OTHER = "other", "Other"
 
+    class Status(models.TextChoices):
+        NEW = "new", "New"
+        REVIEWED = "reviewed", "Reviewed"
+        ARCHIVED = "archived", "Archived"
+
     name = models.CharField(max_length=100)
     email = models.EmailField()
     category = models.CharField(max_length=20, choices=Category.choices)
     message = models.TextField()
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.NEW)
+    admin_note = models.TextField(blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "feedback"
