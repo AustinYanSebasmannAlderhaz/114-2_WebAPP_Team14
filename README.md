@@ -44,15 +44,74 @@ python3 manage.py makemigrations # mac
 python manage.py migrate 
 python3 manage.py migrate # mac
 
+# Load default content data (optional, recommended for a new database)
+python manage.py seed_initial_content
+python3 manage.py seed_initial_content # mac
+
 # Run server
 python manage.py runserver 
 python3 manage.py runserver # mac
 ```
 
+Backend / Admin Content Maintenance：  
+---
+
+這個專案的後台維護目前分成兩塊：Django Admin 內容管理，以及預設內容資料重建。
+
+### 1. Django Admin Maintenance
+
+```bash
+cd NINJAMaster
+python manage.py runserver
+```
+
+開啟：
+
+```text
+http://127.0.0.1:8000/admin/
+```
+
+目前可在 Admin 維護的主要資料：
+
+- `Character`：角色基本資料、元素、初登場、描述、票數。
+- `CharacterImage`：角色圖片，後台會顯示圖片預覽。
+- `ElementSource` / `ElementPower` / `ElementHolderHistory`：元素來源、元素能力、歷任持有者。
+- `Feedback`：使用者回饋，可標記 `New` / `Reviewed` / `Archived`，也可填寫 `admin_note` 做內部備註。
+
+### 2. Reset Initial Content
+
+新電腦、新資料庫，或 `db.sqlite3` 被刪掉後，可以先跑 migration，再載入預設內容：
+
+```bash
+cd NINJAMaster
+python manage.py migrate
+python manage.py seed_initial_content
+```
+
+如果想把角色、圖片、元素資料整批重建，使用：
+
+```bash
+python manage.py seed_initial_content --reset-content
+```
+
+注意：
+
+- `--reset-content` 會刪除角色、角色圖片、元素資料、投票、收藏、時間線進度，再重新載入 fixture。
+- `--reset-content` **不會刪除 Feedback**，避免使用者回饋被清掉。
+- 預設內容來源是 `mainsite/fixtures/initial_content.json`。
+- 不要把 `User`、`Feedback`、`CharacterVote`、`CharacterFavorite`、`TimelineProgress` dump 進預設 fixture，這些是使用者互動資料。
+- 預設 fixture 裡的 `vote_count` 應維持 0，避免把本機測試票數帶到新資料庫。
+
+更多簡短指令也可以看 `NINJAMaster/CONTENT_MAINTENANCE.md`。
+
 Project Progress Update：  
 ---
 
 ⚠️⚠️ 注意 **看這裡** ⚠️⚠️
+
+- 2026/05/12: 後台維護流程與預設內容 seed 指令完成。
+
+> 新增 `mainsite/fixtures/initial_content.json` 作為角色、角色圖片、元素來源、元素能力與元素持有歷史的預設內容資料，並加入 `python manage.py seed_initial_content` 管理指令；新資料庫可一鍵載入預設內容，也可用 `--reset-content` 重建內容資料。Django Admin 同步強化角色圖片預覽、角色圖片數顯示，以及 Feedback 的 `New / Reviewed / Archived` 狀態與 `admin_note` 內部備註，方便管理者整理回饋。
 
 - 2026/05/07: 個人化時間線書籤系統上線。
 
